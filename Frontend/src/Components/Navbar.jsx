@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Login from './Login';
+import { useAuth } from '../context/AuthProvider';
+import Logout from './Logout';
+import { Link } from 'react-router-dom';
+
 function Navbar() {
+  const [authUser, setAuthUser]=useAuth();
+  
   const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") : "light");
   const element = document.documentElement;
 
@@ -31,15 +37,15 @@ function Navbar() {
     <>
       <li><a href="/">Home</a></li>
       <li><a href="/products">Products</a></li>
-      <li><a href="#">Contact us</a></li>
-      <li><a href="#">Price List</a></li>
+      <li><a href="/contact">Contact us</a></li>
+      <li><a href="About">About </a></li>
     </>
   );
 
   return (
     <>
-      <div className={`max-w-screen-4xl container mx-auto md:px-20 px-4 dark:bg-slate-900 dark:text-white fixed top-0 right-0 left-0 z-50 ${sticky ? "shadow-md bg-base-200 dark:bg-slate-900 text-white duration-300 transition-all ease-in-out" : ""}`}>
-        <div className="navbar">
+      <div className={`max-w-screen-4xl text-gray-600 font-bold container mx-auto md:px-20 px-4 dark:bg-slate-900 dark:text-white fixed top-0 right-0 left-0 z-50 ${sticky ? "shadow-md bg-base-200 dark:bg-slate-900 text-white duration-300 transition-all ease-in-out" : ""}`}>
+        <div className="navbar text-gray-600 font-bold dark:text-white">
           <div className="navbar-start">
             <div className="dropdown">
               <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -51,7 +57,9 @@ function Navbar() {
                 {navItems}
               </ul>
             </div>
+            <Link to='/'>
             <a className="text-2xl font-bold cursor-pointer hover:text-orange-500">OBI</a>
+            </Link>
           </div>
           <div className='navbar-end space-x-3'>
             <div className="navbar-center hidden lg:flex">
@@ -76,12 +84,17 @@ function Navbar() {
                 <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
               </svg>
             </label>
-            <div>
-              <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-600 duration-300 cursor-pointer" onClick={()=> document.getElementById("my_modal_3").showModal()}>
-                
-                LOGIN</a>
-                <Login/>
-            </div>
+            {authUser ? (
+              <Logout />
+            ) : (
+              <div>
+                <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-600 duration-300 cursor-pointer" onClick={() => document.getElementById("my_modal_3").showModal()}>
+                  LOGIN
+                </a>
+                <Login />
+              </div>
+            )}
+            
           </div>
         </div>
       </div>

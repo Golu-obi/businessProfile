@@ -18,9 +18,9 @@ function Cards({ item }) {
           {/* Optionally, you can add a badge or any additional element here */}
         </h2>
         <p>{item.title}</p>
-        <p className="text-lg font-semibold">Rs {item.Price}/Pcs</p>
+        {/* <p className="text-lg font-semibold">Rs {item.Price}/Pcs</p> */}
         <div className="card-actions justify-between">
-          <div className='cursor-pointer px-2 py-1 rounded-full border-[2px] hover:bg-gray-950	hover:text-white'>Buy Now</div>
+          <div className='cursor-pointer px-2 py-1 rounded-full border-[2px] hover:bg-gray-950	hover:text-white'>Explore</div>
           <div className="badge badge-outline">{item.category}</div>
 
         </div>

@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 function LOGIN() {
   const {
@@ -8,10 +10,41 @@ function LOGIN() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
+  const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle login logic here, e.g., authentication
+  const onSubmit = async (data) => {
+    const userInfo = {
+      email: data.email,
+      password: data.password
+    };
+
+    try {
+      const res = await axios.post("http://localhost:4001/user/login", userInfo);
+      console.log(res.data);
+      if (res.data) {
+        
+        toast.success('Login Successfull!');
+        document.getElementById('my_modal_3').close();
+        setTimeout(()=>{
+          window.location.reload();
+          localStorage.setItem("Users", JSON.stringify(res.data.user));
+
+        },1000);
+
+         // Redirect to the dashboard or any other page
+      }
+    } catch (err) {
+      if (err.response) {
+        console.log(err);
+      
+        toast.error("Error: " + err.response.data.message);
+        setTimeout(()=>{
+
+        },2000);
+
+      }
+    }
   };
 
   return (
@@ -19,7 +52,7 @@ function LOGIN() {
       <dialog id="my_modal_3" className="modal">
         <div className="modal-box dark:bg-slate-900 dark:text-white">
           <form onSubmit={handleSubmit(onSubmit)} method="dialog">
-            <Link to='/' type="button" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => document.getElementById('my_modal_3').close()}>✕</Link>
+            <button type="button" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => document.getElementById('my_modal_3').close()}>✕</button>
             <h3 className="font-bold text-lg">Login</h3>
             <div className="mt-4 space-y-2">
               <span>Email</span>
